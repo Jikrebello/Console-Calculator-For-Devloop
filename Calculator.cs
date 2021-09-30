@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Console_Calculator_For_Devloop
 {
     class Calculator
     {
-        bool isFinished = false;
+        readonly bool isFinished = false;
 
         public Calculator()
         {
@@ -25,8 +21,6 @@ namespace Console_Calculator_For_Devloop
                 else
                 {
                     string cleanString = IsExpressionValid(input);
-                    //Console.WriteLine(cleanString);
-
                     EvaluateExpression(cleanString);
                 }
             }
@@ -41,60 +35,74 @@ namespace Console_Calculator_For_Devloop
         private string IsExpressionValid(string _input)
         {
             // Take the input string and remove all junk values that aren’t valid.
-            string cleanstring = new string(_input.Where(c => char.IsDigit(c) || c == '+' || c == '-' || c == '\\' || c == '*' 
-                                                                              || c == '0' || c == '1' || c == '2' || c == '3' || c == '4' 
-                                                                              || c == '5' || c == '6' || c == '7' || c == '8' || c == '9').ToArray());
+            string cleanstring = new string(_input.Where(c => char.IsDigit(c) || c == '+' || c == '-' || c == '/' || c == '*').ToArray());
             return cleanstring;
         }
 
         private void EvaluateExpression(string _cleanString)
         {
-            string leftsideValue = "";
-            string rightsideValue = "";
-            int operatorPosition = -1;
-            char arithmeticOperator = 'U'; // U for undefined
+            //char operatorValue = ' ';
+            int operatorPosition;
+            string rightSideValue;
+            string leftSideValue;
 
-            // loop for the first value the type of operator, and its position in the string.
-            for (int i = 0; i < _cleanString.Length; i++)
+            if (_cleanString.Contains('+'))
             {
-                leftsideValue += _cleanString[i];
-                if (_cleanString[i] == '+')
-                {
-                    arithmeticOperator = _cleanString[i];
-                    operatorPosition = _cleanString[i];
-                }
-                else if (_cleanString[i] == '-')
-                {
-                    arithmeticOperator = _cleanString[i];
-                    operatorPosition = _cleanString[i];
-                }
-                else if (_cleanString[i] == '*')
-                {
-                    arithmeticOperator = _cleanString[i];
-                    operatorPosition = _cleanString[i];
-                }
-                else if (_cleanString[i] == '/')
-                {
-                    arithmeticOperator = _cleanString[i];
-                    operatorPosition = _cleanString[i];
-                }
+                operatorPosition = _cleanString.IndexOf('+');
+                leftSideValue = _cleanString.Substring(0, operatorPosition);
+                //operatorValue = _cleanString[operatorPosition];
+                rightSideValue = _cleanString.Substring(operatorPosition + 1);
+                Addition(Convert.ToInt32(leftSideValue), Convert.ToInt32(rightSideValue));
             }
-
-            // clean up the left side value.
-            leftsideValue.TrimEnd('+', '-', '\\', '*');
-
-            // loop for the right hand side value, from the position of the operator + 1
-            for (int i = operatorPosition; i < _cleanString.Length; i++)
+            else if (_cleanString.Contains('-'))
             {
-                rightsideValue += _cleanString[i];
+                operatorPosition = _cleanString.IndexOf('-');
+                leftSideValue = _cleanString.Substring(0, operatorPosition);
+                //operatorValue = _cleanString[operatorPosition];
+                rightSideValue = _cleanString.Substring(operatorPosition + 1);
+                Subtraction(Convert.ToInt32(leftSideValue), Convert.ToInt32(rightSideValue));
             }
-
-            Console.WriteLine("Left side value: " + leftsideValue);
-            Console.WriteLine("Operator value: " + arithmeticOperator);
-            Console.WriteLine("Right side value: " + rightsideValue);
+            else if (_cleanString.Contains('*'))
+            {
+                operatorPosition = _cleanString.IndexOf('*');
+                leftSideValue = _cleanString.Substring(0, operatorPosition);
+                //operatorValue = _cleanString[operatorPosition];
+                rightSideValue = _cleanString.Substring(operatorPosition + 1);
+                Multiplication(Convert.ToInt32(leftSideValue), Convert.ToInt32(rightSideValue));
+            }
+            else if (_cleanString.Contains('/'))
+            {
+                operatorPosition = _cleanString.IndexOf('/');
+                leftSideValue = _cleanString.Substring(0, operatorPosition);
+                //operatorValue = _cleanString[operatorPosition];
+                rightSideValue = _cleanString.Substring(operatorPosition + 1);
+                Division(Convert.ToInt32(leftSideValue), Convert.ToInt32(rightSideValue));
+            }
         }
 
+        void Addition(int _leftSide, int _rightSide)
+        {
+            int result = _leftSide + _rightSide;
+            Console.WriteLine(_leftSide + " + " + _rightSide + " = " + result);
+        }
 
+        void Subtraction(int _leftSide, int _rightSide)
+        {
+            int result = _leftSide - _rightSide;
+            Console.WriteLine(_leftSide + " - " + _rightSide + " = " + result);
+        }
+
+        void Multiplication(int _leftSide, int _rightSide)
+        {
+            int result = _leftSide * _rightSide;
+            Console.WriteLine(_leftSide + " * " + _rightSide + " = " + result);
+        }
+
+        void Division(int _leftSide, int _rightSide)
+        {
+            int result = _leftSide / _rightSide;
+            Console.WriteLine(_leftSide + " / " + _rightSide + " = " + result);
+        }
 
     }
 }

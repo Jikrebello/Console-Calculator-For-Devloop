@@ -1,0 +1,7 @@
+E:\C# Projects\General C#\Console Calculator For Devloop\bin\Debug\Console Calculator For Devloop.exe.config
+E:\C# Projects\General C#\Console Calculator For Devloop\bin\Debug\Console Calculator For Devloop.exe
+E:\C# Projects\General C#\Console Calculator For Devloop\bin\Debug\Console Calculator For Devloop.pdb
+E:\C# Projects\General C#\Console Calculator For Devloop\obj\Debug\Console Calculator For Devloop.csproj.AssemblyReference.cache
+E:\C# Projects\General C#\Console Calculator For Devloop\obj\Debug\Console Calculator For Devloop.csproj.CoreCompileInputs.cache
+E:\C# Projects\General C#\Console Calculator For Devloop\obj\Debug\Console Calculator For Devloop.exe
+E:\C# Projects\General C#\Console Calculator For Devloop\obj\Debug\Console Calculator For Devloop.pdb

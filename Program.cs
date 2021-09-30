@@ -10,6 +10,7 @@ namespace Console_Calculator_For_Devloop
     {
         static void Main(string[] args)
         {
+            Calculator calculator = new Calculator();
         }
     }
 }

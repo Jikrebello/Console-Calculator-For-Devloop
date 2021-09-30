@@ -102,6 +102,10 @@ namespace Console_Calculator_For_Devloop
                     result = _leftSide / _rightSide;
                     Console.WriteLine(_leftSide + " / " + _rightSide + " = " + result);
                     break;
+
+                default:// --- EMPTY INPUT ---
+                    Console.WriteLine("Please enter a valid expression.");
+                    break;
             }
         }
 

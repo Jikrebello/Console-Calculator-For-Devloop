@@ -12,7 +12,7 @@ namespace Console_Calculator_For_Devloop
             Console.WriteLine("--- CONSOLE CALCULATOR ---");
             Console.WriteLine("Input a single Addition, Subtraction, Multiplication or Division expression.");
             Console.WriteLine("e.g. \"2 + 2\"");
-            Console.WriteLine("Input \"end\" to exit the program.");
+            Console.WriteLine("Type \"end\" to exit the program.");
             while (!isFinished)
             {
                 string input = Console.ReadLine();
@@ -21,7 +21,7 @@ namespace Console_Calculator_For_Devloop
                 else
                 {
                     string cleanString = IsExpressionValid(input);
-                    EvaluateExpression(cleanString);
+                    EvaluateExpression(ref cleanString);
                 }
             }
         }
@@ -34,74 +34,75 @@ namespace Console_Calculator_For_Devloop
         /// <returns>A arithmetic expression ready for evaluation.</returns>
         private string IsExpressionValid(string _input)
         {
-            // Take the input string and remove all junk values that aren’t valid.
+            // Take the input string and remove all junk values (non numeric chars except + - / *)
             string cleanstring = new string(_input.Where(c => char.IsDigit(c) || c == '+' || c == '-' || c == '/' || c == '*').ToArray());
             return cleanstring;
         }
 
-        private void EvaluateExpression(string _cleanString)
+        /// <summary>
+        /// Breaks the string into a left hand side, middle operator and a right hand side.
+        /// </summary>
+        /// <param name="_cleanString"></param>
+        void EvaluateExpression(ref string _cleanString)
         {
-            //char operatorValue = ' ';
+            int leftSide = 0;
+            int rightSide = 0;
             int operatorPosition;
-            string rightSideValue;
-            string leftSideValue;
+            char operatorValue = ' ';
 
-            if (_cleanString.Contains('+'))
+            for (int i = 0; i < _cleanString.Length; i++)
             {
-                operatorPosition = _cleanString.IndexOf('+');
-                leftSideValue = _cleanString.Substring(0, operatorPosition);
-                //operatorValue = _cleanString[operatorPosition];
-                rightSideValue = _cleanString.Substring(operatorPosition + 1);
-                Addition(Convert.ToInt32(leftSideValue), Convert.ToInt32(rightSideValue));
+                // True for the first non numeric number in the string.
+                if (!char.IsDigit(_cleanString[i]))
+                {
+                    // 1) Get the operator in the string.
+                    operatorValue = _cleanString[i];
+                    // 2) Get the 0 indexed position of the operator in the string.
+                    operatorPosition = _cleanString.IndexOf(operatorValue);
+                    // 3) Use the position to subString the left and right hand sides of the expression.
+                    leftSide = Convert.ToInt32(_cleanString.Substring(0, operatorPosition));
+                    rightSide = Convert.ToInt32(_cleanString.Substring(operatorPosition + 1));
+                    break;
+                }
             }
-            else if (_cleanString.Contains('-'))
-            {
-                operatorPosition = _cleanString.IndexOf('-');
-                leftSideValue = _cleanString.Substring(0, operatorPosition);
-                //operatorValue = _cleanString[operatorPosition];
-                rightSideValue = _cleanString.Substring(operatorPosition + 1);
-                Subtraction(Convert.ToInt32(leftSideValue), Convert.ToInt32(rightSideValue));
-            }
-            else if (_cleanString.Contains('*'))
-            {
-                operatorPosition = _cleanString.IndexOf('*');
-                leftSideValue = _cleanString.Substring(0, operatorPosition);
-                //operatorValue = _cleanString[operatorPosition];
-                rightSideValue = _cleanString.Substring(operatorPosition + 1);
-                Multiplication(Convert.ToInt32(leftSideValue), Convert.ToInt32(rightSideValue));
-            }
-            else if (_cleanString.Contains('/'))
-            {
-                operatorPosition = _cleanString.IndexOf('/');
-                leftSideValue = _cleanString.Substring(0, operatorPosition);
-                //operatorValue = _cleanString[operatorPosition];
-                rightSideValue = _cleanString.Substring(operatorPosition + 1);
-                Division(Convert.ToInt32(leftSideValue), Convert.ToInt32(rightSideValue));
-            }
+            SolveExpressionAndDisplay(leftSide, rightSide, operatorValue);
         }
 
-        void Addition(int _leftSide, int _rightSide)
+        /// <summary>
+        /// Solves the expression based on the value of _operatorValue
+        /// </summary>
+        /// <param name="_leftSide">The left hand side value of the expression</param>
+        /// <param name="_rightSide">The right hand side value of the expression</param>
+        /// <param name="_operatorValue">The arithmetic operator that effects the left and right hand side of the expression.</param>
+        void SolveExpressionAndDisplay(int _leftSide, int _rightSide, char _operatorValue)
         {
-            int result = _leftSide + _rightSide;
-            Console.WriteLine(_leftSide + " + " + _rightSide + " = " + result);
-        }
+            int result;
 
-        void Subtraction(int _leftSide, int _rightSide)
-        {
-            int result = _leftSide - _rightSide;
-            Console.WriteLine(_leftSide + " - " + _rightSide + " = " + result);
-        }
+            switch (_operatorValue)
+            {
 
-        void Multiplication(int _leftSide, int _rightSide)
-        {
-            int result = _leftSide * _rightSide;
-            Console.WriteLine(_leftSide + " * " + _rightSide + " = " + result);
-        }
+                case '+': // ---ADDITION---
+                    result = _leftSide + _rightSide;
+                    Console.WriteLine(_leftSide + " + " + _rightSide + " = " + result);
+                    break;
 
-        void Division(int _leftSide, int _rightSide)
-        {
-            int result = _leftSide / _rightSide;
-            Console.WriteLine(_leftSide + " / " + _rightSide + " = " + result);
+
+                case '-': // ---SUBTRACTION---
+                    result = _leftSide - _rightSide;
+                    Console.WriteLine(_leftSide + " - " + _rightSide + " = " + result);
+                    break;
+
+
+                case '*': // ---MULTIPLICATION---
+                    result = _leftSide * _rightSide;
+                    Console.WriteLine(_leftSide + " * " + _rightSide + " = " + result);
+                    break;
+
+                case '/': // ---DIVISION---
+                    result = _leftSide / _rightSide;
+                    Console.WriteLine(_leftSide + " / " + _rightSide + " = " + result);
+                    break;
+            }
         }
 
     }

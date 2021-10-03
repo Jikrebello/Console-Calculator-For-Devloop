@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Console_Calculator_For_Devloop
@@ -21,7 +22,8 @@ namespace Console_Calculator_For_Devloop
                 else
                 {
                     string cleanString = IsExpressionValid(input);
-                    EvaluateExpression(ref cleanString);
+                    //EvaluateExpression(ref cleanString);
+                    EvaluateMultiExpressions(ref cleanString);
                 }
             }
         }
@@ -34,8 +36,8 @@ namespace Console_Calculator_For_Devloop
         /// <returns>A arithmetic expression ready for evaluation.</returns>
         private string IsExpressionValid(string _input)
         {
-            // Take the input string and remove all junk values (non numeric chars except + - / *)
-            string cleanstring = new string(_input.Where(c => char.IsDigit(c) || c == '+' || c == '-' || c == '/' || c == '*').ToArray());
+            // Take the input string and remove all junk values (non numeric chars except + - / *) --- ADDED ( AND ) FOR MULTI EXPRESSIONS ---
+            string cleanstring = new string(_input.Where(c => char.IsDigit(c) || c == '+' || c == '-' || c == '/' || c == '*' || c == '(' || c == ')').ToArray());
             return cleanstring;
         }
 
@@ -66,6 +68,80 @@ namespace Console_Calculator_For_Devloop
                 }
             }
             SolveExpressionAndDisplay(leftSide, rightSide, operatorValue);
+        }
+
+        void EvaluateMultiExpressions(ref string _cleanString)
+        {
+            // Holds the indexed positions of where the opening and closing brackets are.
+            List<Tuple<int, int>> bracketPositions = new List<Tuple<int, int>>();
+            // Holds the index of an arithmetic operator and the type it is.
+            Dictionary<int, char> operatorPositions = new Dictionary<int, char>();
+
+
+            for (int expression = 0; expression < _cleanString.Length; expression++)
+            {
+                int openBracketPosition;
+                int closeBracketPosition;
+
+                for (int i = 0; i < _cleanString.Length; i++)
+                {
+                    if (_cleanString[i] == '(')
+                        openBracketPosition = i;
+                    else if (_cleanString[i] == ')')
+                        closeBracketPosition = i;
+
+
+                }
+            }
+
+
+
+            for (int i = 0; i < _cleanString.Length; i++)
+            {
+                // Get the indexes of all non-numeric values in the (multi) expression.
+                switch (_cleanString[i])
+                {
+                    case '(': // ---OPEN BRACKET---
+
+
+                        break;
+                    case ')': // ---CLOSED BRACKET---
+                        bracketPositions.Add(i);
+                        break;
+                    case '/': // ---DIVISION OPERATOR---
+                        operatorPositions.Add(i, '/');
+                        break;
+                    case '*': // ---MULTIPLICATION OPERATOR---
+                        operatorPositions.Add(i, '*');
+                        break;
+                    case '+': // ---ADDITION OPERATOR---
+                        operatorPositions.Add(i, '+');
+                        break;
+                    case '-': // ---SUBTRACTION OPERATOR---
+                        operatorPositions.Add(i, '-');
+                        break;
+                }
+            }
+
+            // check that we always have 2 pairs of brackets
+            if (bracketPositions.Count % 2 != 0)
+            {
+                Console.WriteLine("Missing a bracket");
+                return;
+            }
+
+            SolveBrackets(bracketPositions, ref _cleanString);
+
+
+        }
+
+        void SolveBrackets(List<int> _bracketPositions, ref string _expression)
+        {
+            for (int i = _bracketPositions[0]; i < _bracketPositions[1]; i++)
+            {
+
+            }
+
         }
 
         /// <summary>
